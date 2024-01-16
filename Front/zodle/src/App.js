@@ -1,6 +1,11 @@
-import { List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Button, IconButton, List, ListItem, ListItemButton, ListItemText, styled } from '@mui/material';
 import './App.css';
 import { useState } from 'react';
+import { Add, Delete } from '@mui/icons-material';
+import { grey, purple } from '@mui/material/colors';
+import AddFileModal from './AddFileModal';
+
+//https://legacy.reactjs.org/docs/forms.html
 
 class DocEntry {
   constructor(id) {
@@ -25,23 +30,46 @@ function App() {
   }
 
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
 
-  console.log(docList);
   return (
     <div className='App'>
       <div className='Body'>
-        <div className='ScrollList'>
-          <List>
-            {docList.map((entry) => 
-              <ListItem disablePadding>
-                  <ListItemButton key={1} onClick={() => setSelectedEntry(entry)}>
-                    <ListItemText primary={entry.Title} />
-                  </ListItemButton>
-              </ListItem>
-            )}
-          </List>
+
+        <div className='LeftPanel'>
+
+          <div className='ButtonMenu'>
+            
+            <IconButton
+              style={{
+                color: 'white',
+                border: '1px solid white',
+                borderRadius: '8px'
+              }}
+              aria-label="add" 
+              size="large"
+              onClick={() => setModalOpen(true)}
+            >
+              <Add/>
+            </IconButton>
+            <AddFileModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+          </div>
+
+          <div className='ScrollList'>
+            <List>
+              {docList.map((entry) => 
+                <ListItem disablePadding>
+                    <ListItemButton key={1} onClick={() => setSelectedEntry(entry)}>
+                      <ListItemText primary={entry.Title} />
+                    </ListItemButton>
+                </ListItem>
+              )}
+            </List>
+          </div>
+
         </div>
-        <div className='Content'>
+
+        <div className='RightPanel'>
           <div className='Description'>
             {selectedEntry ? selectedEntry.Description : 'Cia turetu buti aprasymas'}
           </div>
