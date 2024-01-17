@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './AddFileModal.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -6,9 +7,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import TagsInput from 'react-tagsinput';
 
 const AddFileModal = ({isOpen, onClose}) => {
   const [open, setOpen] = React.useState(false);
+  const [selectedTags, setTags] = React.useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,21 +54,30 @@ const AddFileModal = ({isOpen, onClose}) => {
 
         <TextField
             autoFocus
-            margin="dense"
-            id="tags"
-            name="tags"
-            label="Tags"
-            fullWidth
-        />
-
-        <TextField
-            autoFocus
             required
             margin="dense"
             id="file"
             name="file"
             type="file"
             fullWidth
+        />
+
+        <TextField
+            autoFocus
+            margin="dense"
+            id="description"
+            name="description"
+            label="Description"
+            fullWidth
+        />
+
+        <TagsInput 
+          className='react-tagsinput'
+          id="tags"
+          name="tags"
+          addKeys={[32]}
+          value={selectedTags}
+          onChange={(tags) => setTags(tags)}
         />
 
         </DialogContent>
