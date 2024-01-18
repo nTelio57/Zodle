@@ -1,4 +1,4 @@
-import { Button, IconButton, List, ListItem, ListItemButton, ListItemText, styled } from '@mui/material';
+import { Button, IconButton, List, ListItem, ListItemButton, ListItemText, TextField, styled } from '@mui/material';
 import './App.css';
 import { useState } from 'react';
 import { Add, Delete } from '@mui/icons-material';
@@ -13,6 +13,7 @@ class DocEntry {
     this.Title = 'Title ' + id;
     this.Description = 'Description ' + id;
     this.Details = 'Details ' + id;
+    this.Tags = ["Tag1"];
 
     for(let i = 0; i < id; i++)
     {
@@ -23,14 +24,28 @@ class DocEntry {
 
 function App() {
 
+  const [selectedEntry, setSelectedEntry] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [searchField, setSearchField] = useState("");
+
+  const handleSearchFieldChange = (value) => {
+    setSearchField(value.toLowerCase());
+  };
+
   const docList = [];
   for(let i = 0; i < 50; i++)
   {
     docList.push(new DocEntry(i));
   }
-
-  const [selectedEntry, setSelectedEntry] = useState(null);
-  const [isModalOpen, setModalOpen] = useState(false);
+  const filteredList = docList.filter(
+    (script) => {
+      return (
+        script.Title.toLowerCase().includes(searchField) ||
+        script.Description.toLowerCase().includes(searchField) ||
+        script.Tags.includes(searchField)
+      );
+    }
+  );
 
   return (
     <div className='App'>
@@ -53,11 +68,24 @@ function App() {
               <Add/>
             </IconButton>
             <AddFileModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              fullWidth
+              type='search'
+              sx={{
+                background: "white",
+                borderRadius: "4px"
+              }}
+              onChange={(change) => handleSearchFieldChange(change.target.value)}
+            />
           </div>
 
           <div className='ScrollList'>
             <List>
-              {docList.map((entry) => 
+              {filteredList.map((entry) => 
                 <ListItem disablePadding>
                     <ListItemButton key={1} onClick={() => setSelectedEntry(entry)}>
                       <ListItemText primary={entry.Title} />
