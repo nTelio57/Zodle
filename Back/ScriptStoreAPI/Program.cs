@@ -1,3 +1,5 @@
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using ScriptStoreAPI.Data;
 using ScriptStoreAPI.Services;
 
@@ -5,7 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(s =>
+{
+    s.SerializerSettings.ContractResolver = new DefaultContractResolver();
+    s.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -19,6 +25,13 @@ builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("D
 builder.Services.AddSingleton<Database>();
 builder.Services.AddTransient<IScriptStoreService, ScriptStoreService>();
 
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", policyBuilder =>
+{
+    policyBuilder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,6 +41,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("MyPolicy");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
