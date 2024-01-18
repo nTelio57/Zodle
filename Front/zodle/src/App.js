@@ -9,12 +9,13 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 //https://legacy.reactjs.org/docs/forms.html
 
 class Script {
-  constructor(id, name, description, details, tags, script) {
+  constructor(id, name, description, details, tags, language, script) {
     this.Id = id;
     this.Name = name;
     this.Description = description;
     this.Details = details;
     this.Tags = tags;
+    this.Language = language;
     this.Script = script;
   }
 }
@@ -111,7 +112,7 @@ function App() {
           <div className='Details'>
             <CodeEditor
               multiline
-              language='cs'
+              language={selectedEntry ? selectedEntry.Language : ''}
               readOnly
               value={selectedEntry ? selectedEntry.Script : 'Cia turetu buti details'}
             />

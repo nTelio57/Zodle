@@ -32,10 +32,18 @@ namespace ScriptStoreAPI.Services
             string path = await AddScriptToFileSystem(scriptCreateDTO.Script);
             var script = _mapper.Map<Script>(scriptCreateDTO);
             script.ScriptPath = path;
+            script.Language = GetLanguage(path);
 
             await _db.Scripts.InsertOneAsync(script);
 
             return;
+        }
+
+        private string GetLanguage(string path)
+        {
+            string extension = Path.GetExtension(path);
+            int index = extension.LastIndexOf('.');
+            return extension.Substring(index + 1);
         }
 
         private async Task<string> AddScriptToFileSystem(IFormFile scriptFile)
