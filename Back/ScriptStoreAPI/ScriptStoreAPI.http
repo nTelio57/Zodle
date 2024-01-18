@@ -1,0 +1,6 @@
+@ScriptStoreAPI_HostAddress = http://localhost:5263
+
+GET {{ScriptStoreAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
