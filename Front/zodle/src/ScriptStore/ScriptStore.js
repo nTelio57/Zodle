@@ -5,18 +5,19 @@ import { Add, Delete, Download } from '@mui/icons-material';
 import AddFileModal from './AddFileModal';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import ApiClient from '../Client/ApiClient';
+import DeleteDialog from './DeleteDialog';
 
   export default function ScriptStore() {
 
     const [selectedEntry, setSelectedEntry] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [searchField, setSearchField] = useState("");
     const [scriptList, setScriptList] = useState([]);
   
     useEffect(() => {
         const getScripts = async () => {
             const scriptData = await ApiClient.get('ScriptStore');
-            console.log(process.env.API_URL);
             if(scriptData)
             {
                 setScriptList(scriptData);
@@ -25,10 +26,26 @@ import ApiClient from '../Client/ApiClient';
         getScripts()
     }, []);
   
-    const handleModalClose = () => {
+    const handleModalClose = (isSubmitted) => {
         setModalOpen(false);
-        window.location.reload();
+        if(isSubmitted){
+          window.location.reload();
+        }
     }
+
+    const handleDeleteDialogClose = async (isDeleted) => {
+      setDeleteDialogOpen(false);
+      if(isDeleted){
+        const url = '/ScriptStore/' + selectedEntry.Id;
+        await ApiClient.delete(url);
+        const index = scriptList.findIndex(x => x.Id === selectedEntry.Id);
+        if (index > -1) { // only splice array when item is found
+          scriptList.splice(index, 1); // 2nd parameter means remove one item only
+        }
+        setScriptList(scriptList);
+        setSelectedEntry(null);
+      }
+  }
   
     const handleSearchFieldChange = (value) => {
         setSearchField(value.toLowerCase());
@@ -69,7 +86,9 @@ import ApiClient from '../Client/ApiClient';
               >
                 <Add/>
               </IconButton>
-              <AddFileModal isOpen={isModalOpen} onClose={() => handleModalClose()} />
+
+              <DeleteDialog isOpen={isDeleteDialogOpen} onClose={handleDeleteDialogClose}/>
+              <AddFileModal isOpen={isModalOpen} onClose={handleModalClose} />
   
               <TextField
                 autoFocus
@@ -109,7 +128,7 @@ import ApiClient from '../Client/ApiClient';
                   <IconButton aria-label="download" onClick={() => handleDownload()}>
                     <Download />
                   </IconButton>
-                  <IconButton aria-label="delete">
+                  <IconButton aria-label="delete" onClick={() => setDeleteDialogOpen(true)}>
                     <Delete />
                   </IconButton>
                 </Box>

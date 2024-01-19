@@ -16,13 +16,13 @@ const AddFileModal = ({isOpen, onClose}) => {
     <React.Fragment>
       <Dialog
         open={isOpen}
-        onClose={onClose}
+        onClose={() => onClose(false)}
         PaperProps={{
           component: 'form',
           onSubmit: (event) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
-            ApiClient.postForm('ScriptStore', formData).then(onClose());
+            ApiClient.postForm('ScriptStore', formData).then(onClose(true));
           },
         }}
       >
@@ -69,7 +69,7 @@ const AddFileModal = ({isOpen, onClose}) => {
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={() => onClose(false)}>Cancel</Button>
           <Button type="submit" >Submit</Button>
         </DialogActions>
       </Dialog>

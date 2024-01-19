@@ -19,6 +19,9 @@
       color: white;
       overflow: auto;
       border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .ScriptButtonPanel{
