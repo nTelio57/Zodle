@@ -37,14 +37,15 @@ function App() {
       });
   }, []);
 
+const handleModalClose = () => {
+  setModalOpen(false);
+  window.location.reload();
+}
+
   const handleSearchFieldChange = (value) => {
     setSearchField(value.toLowerCase());
   };
 
-  for(let i = 0; i < 50; i++)
-  {
-    //scriptList.push(new DocEntry(i));
-  }
   const filteredList = scriptList.filter(
     (script) => {
       return (
@@ -75,7 +76,7 @@ function App() {
             >
               <Add/>
             </IconButton>
-            <AddFileModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+            <AddFileModal isOpen={isModalOpen} onClose={() => handleModalClose()} />
 
             <TextField
               autoFocus
@@ -111,7 +112,6 @@ function App() {
           </div>
           <div className='Details'>
             <CodeEditor
-              multiline
               language={selectedEntry ? selectedEntry.Language : ''}
               readOnly
               value={selectedEntry ? selectedEntry.Script : 'Cia turetu buti details'}

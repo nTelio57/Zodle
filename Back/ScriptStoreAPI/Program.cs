@@ -7,7 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddNewtonsoftJson(s =>
+builder.Services.AddControllers
+    (opt => opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
+    .AddNewtonsoftJson(s =>
 {
     s.SerializerSettings.ContractResolver = new DefaultContractResolver();
     s.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
