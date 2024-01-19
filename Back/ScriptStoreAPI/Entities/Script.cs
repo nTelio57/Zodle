@@ -13,6 +13,7 @@ namespace ScriptStoreAPI.Models
         public string[] Tags { get; set; }
         public string Language { get; set; }
         public string ScriptPath { get; set; }
+        public string ContentType { get; set; }
 
         public string ScriptToText()
         {

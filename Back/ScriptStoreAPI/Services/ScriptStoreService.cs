@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using ScriptStoreAPI.Data;
@@ -27,6 +29,14 @@ namespace ScriptStoreAPI.Services
             return scriptDtos;
         }
 
+        public async Task<ScriptReadDTO> Get(string id)
+        {
+            Script script = await _db.Scripts.Find(_ => true).FirstOrDefaultAsync();
+            var scriptDto = _mapper.Map<ScriptReadDTO>(script);
+
+            return scriptDto;
+        }
+
         public async Task Post(ScriptCreateDTO scriptCreateDTO)
         {
             string path = await AddScriptToFileSystem(scriptCreateDTO.Script);
@@ -34,6 +44,7 @@ namespace ScriptStoreAPI.Services
             if (script.Description == null) script.Description = "";
             script.ScriptPath = path;
             script.Language = GetLanguage(path);
+            script.ContentType = scriptCreateDTO.Script.ContentType;
 
             await _db.Scripts.InsertOneAsync(script);
 

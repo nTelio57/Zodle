@@ -35,8 +35,8 @@ import ApiClient from '../Client/ApiClient';
     };
 
     const handleDownload = () => {
-      console.log('Downloading');
-
+      const path = process.env.REACT_APP_API_URL + '/ScriptStore/download/' + selectedEntry.Id;
+      ApiClient.download(path);
     }
   
     const filteredList = scriptList.filter(
