@@ -1,7 +1,7 @@
-import { IconButton, List, ListItem, ListItemButton, ListItemText, TextField } from '@mui/material';
+import { Box, IconButton, List, ListItem, ListItemButton, ListItemText, TextField } from '@mui/material';
 import './ScriptStore.css';
 import { useEffect, useState } from 'react';
-import { Add } from '@mui/icons-material';
+import { Add, Delete, Download } from '@mui/icons-material';
 import AddFileModal from './AddFileModal';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import ApiClient from '../Client/ApiClient';
@@ -33,6 +33,11 @@ import ApiClient from '../Client/ApiClient';
     const handleSearchFieldChange = (value) => {
         setSearchField(value.toLowerCase());
     };
+
+    const handleDownload = () => {
+      console.log('Downloading');
+
+    }
   
     const filteredList = scriptList.filter(
       (script) => {
@@ -96,7 +101,22 @@ import ApiClient from '../Client/ApiClient';
   
           <div className='RightPanel'>
             <div className='Description'>
-              {selectedEntry ? selectedEntry.Description : 'Cia turetu buti aprasymas'}
+              <div className='Description-top-panel'>
+                <div>
+                  {selectedEntry ? selectedEntry.Name : 'Pavadinimas'}
+                </div>
+                <Box className='ScriptButtonPanel' visibility={selectedEntry ? 'visible' : 'hidden'}>
+                  <IconButton aria-label="download" onClick={() => handleDownload()}>
+                    <Download />
+                  </IconButton>
+                  <IconButton aria-label="delete">
+                    <Delete />
+                  </IconButton>
+                </Box>
+              </div>
+              <div>
+                {selectedEntry ? selectedEntry.Description : ''}
+              </div>
             </div>
             <div className='Details'>
               <CodeEditor

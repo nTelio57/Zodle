@@ -7,7 +7,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TagsInput from 'react-tagsinput';
-import axios from 'axios';
 import ApiClient from '../Client/ApiClient';
 
 const AddFileModal = ({isOpen, onClose}) => {

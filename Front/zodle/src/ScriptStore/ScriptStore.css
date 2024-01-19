@@ -20,6 +20,12 @@
       overflow: auto;
       border-radius: 8px;
     }
+
+    .ScriptButtonPanel{
+      background: white;
+      border-radius: 8px;
+      display: flex;
+    }
     
     .ScrollList{
       background-color: #2c6385;
@@ -47,6 +53,11 @@
       margin: 16px;
     }
     
+    .Description-top-panel{
+      display: flex;
+      justify-content: space-between;
+    }
+
     .Description{
       background-color: #2c6385;
       height: 25%;
