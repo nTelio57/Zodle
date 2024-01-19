@@ -68,6 +68,8 @@ import DeleteDialog from './DeleteDialog';
   
     return (
       <div className='App'>
+        <DeleteDialog isOpen={isDeleteDialogOpen} onClose={handleDeleteDialogClose}/>
+        <AddFileModal isOpen={isModalOpen} onClose={handleModalClose} />
         <div className='Body'>
   
           <div className='LeftPanel'>
@@ -81,14 +83,12 @@ import DeleteDialog from './DeleteDialog';
                   borderRadius: '8px'
                 }}
                 aria-label="add" 
-                size="large"
+                size="medium"
                 onClick={() => setModalOpen(true)}
               >
                 <Add/>
+                <Box fontSize={16}>Add script</Box>
               </IconButton>
-
-              <DeleteDialog isOpen={isDeleteDialogOpen} onClose={handleDeleteDialogClose}/>
-              <AddFileModal isOpen={isModalOpen} onClose={handleModalClose} />
   
               <TextField
                 autoFocus
@@ -96,6 +96,7 @@ import DeleteDialog from './DeleteDialog';
                 margin="dense"
                 fullWidth
                 type='search'
+                placeholder='Search'
                 sx={{
                   background: "white",
                   borderRadius: "4px"
@@ -106,7 +107,13 @@ import DeleteDialog from './DeleteDialog';
   
             <div className='ScrollList'>
               <List>
-                {filteredList.map((entry) => 
+                {filteredList.length <= 0 ? 
+                <Box sx={{padding: "8px"}}>
+                  List is empty
+                </Box>
+                : 
+                
+                filteredList.map((entry) => 
                   <ListItem key={entry.Id} disablePadding>
                       <ListItemButton onClick={() => setSelectedEntry(entry)}>
                         <ListItemText primary={entry.Name} />
@@ -121,9 +128,9 @@ import DeleteDialog from './DeleteDialog';
           <div className='RightPanel'>
             <div className='Description'>
               <div className='Description-top-panel'>
-                <div>
-                  {selectedEntry ? selectedEntry.Name : 'Pavadinimas'}
-                </div>
+                <Box padding={1}>
+                  {selectedEntry ? selectedEntry.Name : 'Select a script'}
+                </Box>
                 <Box className='ScriptButtonPanel' visibility={selectedEntry ? 'visible' : 'hidden'}>
                   <IconButton aria-label="download" onClick={() => handleDownload()}>
                     <Download />
@@ -141,7 +148,7 @@ import DeleteDialog from './DeleteDialog';
               <CodeEditor
                 language={selectedEntry ? selectedEntry.Language : ''}
                 readOnly
-                value={selectedEntry ? selectedEntry.Script : 'Cia turetu buti details'}
+                value={selectedEntry ? selectedEntry.Script : '<...>'}
               />
             </div>
           </div>
