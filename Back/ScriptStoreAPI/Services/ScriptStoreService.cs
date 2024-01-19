@@ -31,6 +31,7 @@ namespace ScriptStoreAPI.Services
         {
             string path = await AddScriptToFileSystem(scriptCreateDTO.Script);
             var script = _mapper.Map<Script>(scriptCreateDTO);
+            if (script.Description == null) script.Description = "";
             script.ScriptPath = path;
             script.Language = GetLanguage(path);
 

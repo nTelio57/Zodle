@@ -1,22 +1,10 @@
-import { Button, IconButton, List, ListItem, ListItemButton, ListItemText, TextField, styled } from '@mui/material';
+import { IconButton, List, ListItem, ListItemButton, ListItemText, TextField } from '@mui/material';
 import './ScriptStore.css';
 import { useEffect, useState } from 'react';
-import { Add, Delete } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import AddFileModal from './AddFileModal';
-import axios from 'axios';
 import CodeEditor from '@uiw/react-textarea-code-editor';
-
-class Script {
-    constructor(id, name, description, details, tags, language, script) {
-      this.Id = id;
-      this.Name = name;
-      this.Description = description;
-      this.Details = details;
-      this.Tags = tags;
-      this.Language = language;
-      this.Script = script;
-    }
-  }
+import ApiClient from '../Client/ApiClient';
 
   export default function ScriptStore() {
 
@@ -26,13 +14,15 @@ class Script {
     const [scriptList, setScriptList] = useState([]);
   
     useEffect(() => {
-      axios.get('https://localhost:7109/ScriptStore')
-        .then(response => {
-          setScriptList(response.data);
-        })
-        .catch(error => {
-          console.error(error);
-        });
+        const getScripts = async () => {
+            const scriptData = await ApiClient.get('ScriptStore');
+            console.log(process.env.API_URL);
+            if(scriptData)
+            {
+                setScriptList(scriptData);
+            }
+        } 
+        getScripts()
     }, []);
   
     const handleModalClose = () => {
@@ -93,8 +83,8 @@ class Script {
             <div className='ScrollList'>
               <List>
                 {filteredList.map((entry) => 
-                  <ListItem disablePadding>
-                      <ListItemButton key={1} onClick={() => setSelectedEntry(entry)}>
+                  <ListItem key={entry.Id} disablePadding>
+                      <ListItemButton onClick={() => setSelectedEntry(entry)}>
                         <ListItemText primary={entry.Name} />
                       </ListItemButton>
                   </ListItem>

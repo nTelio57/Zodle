@@ -8,15 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TagsInput from 'react-tagsinput';
 import axios from 'axios';
-
-class ScriptUpload {
-  constructor(name, description, tags, script) {
-    this.Name = name;
-    this.Description = description;
-    this.Tags = tags;
-    this.Script = script;
-  }
-}
+import ApiClient from '../Client/ApiClient';
 
 const AddFileModal = ({isOpen, onClose}) => {
   const [selectedTags, setTags] = React.useState([]);
@@ -31,23 +23,7 @@ const AddFileModal = ({isOpen, onClose}) => {
           onSubmit: (event) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-
-            const Name = formJson.Name;
-            const Script = formJson.Script;
-            const Description = formJson.Description;
-            const Tags = selectedTags;
-
-            const script = new ScriptUpload(
-              formJson.Name,
-              formJson.Description,
-              selectedTags,
-              formJson.File
-            );
-
-            console.log(formData);
-
-            axios.postForm('https://localhost:7109/ScriptStore', formData).then(onClose());
+            ApiClient.postForm('ScriptStore', formData).then(onClose());
           },
         }}
       >
