@@ -40,6 +40,22 @@ namespace ScriptStoreAPI.Services
             return;
         }
 
+        public async Task<bool> Delete(string id)
+        {
+            var script = await _db.Scripts.Find(x => x.Id == id).FirstOrDefaultAsync();
+            try
+            {
+                File.Delete(script.ScriptPath);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to delete image file of id {id} with error: {e.Message}");
+            }
+
+            var result = await _db.Scripts.DeleteOneAsync(x => x.Id == id);
+            return result.DeletedCount > 0;
+        }
+
         private string GetLanguage(string path)
         {
             string extension = Path.GetExtension(path);
@@ -59,14 +75,6 @@ namespace ScriptStoreAPI.Services
             }
 
             return fullPath;
-        }
-
-        private async Task<string> ScriptToText(string path)
-        {
-            using (StreamReader stream = new(path))
-            {
-                return await stream.ReadToEndAsync();
-            }
         }
     }
 }

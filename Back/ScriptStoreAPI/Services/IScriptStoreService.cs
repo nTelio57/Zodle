@@ -6,5 +6,6 @@ namespace ScriptStoreAPI.Services
     {
         Task<IEnumerable<ScriptReadDTO>> GetAll();
         Task Post(ScriptCreateDTO scriptCreateDTO);
+        Task<bool> Delete(string id);
     }
 }

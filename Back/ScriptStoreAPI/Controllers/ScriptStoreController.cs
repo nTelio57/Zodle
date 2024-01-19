@@ -25,5 +25,13 @@ namespace ScriptStoreAPI.Controllers
         {
             return await _scriptStoreService.GetAll();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (await _scriptStoreService.Delete(id))
+                return NoContent();
+            return BadRequest();
+        }
     }
 }
