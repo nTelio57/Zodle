@@ -66,8 +66,7 @@ namespace ScriptStoreAPI.Hubs
             var room = ActiveRooms[connectedPlayer.ActiveRoom];
 
             room.AddDare(new SworgyDare(connectedPlayer, dare));
-
-            if(room.Dares.Count == room.Players.Count)
+            if (room.Dares.Count == room.Players.Count)
             {
                 room.AssignDares();
                 await Clients.Clients(room.Players.Select(x => x.ConnectionId)).SendAsync("OnDareStart", room.Dares[0]);

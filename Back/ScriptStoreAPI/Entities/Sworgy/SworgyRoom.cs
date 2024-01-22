@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ScriptStoreAPI.Entities.Sworgy
+﻿namespace ScriptStoreAPI.Entities.Sworgy
 {
     public class SworgyRoom
     {
@@ -53,7 +51,7 @@ namespace ScriptStoreAPI.Entities.Sworgy
 
             foreach (SworgyDare dare in Dares)
             {
-                SworgyPlayer asignee = Players.FirstOrDefault(x => x.ConnectionId != dare.Creator.ConnectionId);
+                SworgyPlayer asignee = playerOrder.FirstOrDefault(x => x.ConnectionId != dare.Creator.ConnectionId);
 
                 if (asignee != null)
                 {
