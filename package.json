@@ -1,0 +1,6 @@
+{
+    "scripts": {
+      "heroku-prebuild": "cd Front/zodle && npm install && npm run build",
+      "start": "cd Front/zodle && npm start"
+    }
+  }
