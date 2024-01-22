@@ -2,10 +2,14 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using ScriptStoreAPI.Data;
 using ScriptStoreAPI.Services;
+using ScriptStoreAPI.Hubs;
+using Amazon.Auth.AccessControlPolicy;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddSignalR();
 
 builder.Services.AddControllers
     (opt => opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
@@ -29,9 +33,12 @@ builder.Services.AddTransient<IScriptStoreService, ScriptStoreService>();
 
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", policyBuilder =>
 {
-    policyBuilder.AllowAnyOrigin()
+    policyBuilder
+        .WithOrigins()
         .AllowAnyMethod()
-        .AllowAnyHeader();
+        .AllowAnyHeader()
+        .WithMethods("GET", "POST")
+        .AllowCredentials();
 }));
 
 var app = builder.Build();
@@ -45,9 +52,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("MyPolicy");
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
+app.MapGet("/", async context =>
+{
+    await context.Response.WriteAsync("Hello World!");
+});
+app.MapHub<SworgyHub>("/sworgy");
 app.MapControllers();
 
 app.Run();
